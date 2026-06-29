@@ -58,6 +58,11 @@ server.log
 /upload/
 /worklog.md
 
+# Scaffold demo folders — not part of the ZEN Sushi app
+/examples/
+/mini-services/
+/skills/
+
 # Local database
 /db/
 /prisma/*.db
