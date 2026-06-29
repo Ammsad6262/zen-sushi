@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable react-hooks/set-state-in-effect -- the navbar uses a hydration-safe mounted flag (client-only) to avoid SSR/CSR mismatch when reading cart count from localStorage */
+
 import { useEffect, useState, useCallback } from "react";
 import {
   motion,
@@ -7,8 +9,9 @@ import {
   useScroll,
   useMotionValueEvent,
 } from "framer-motion";
-import { Menu, X, Phone, Clock } from "lucide-react";
+import { Menu, X, Phone, Clock, ShoppingBag } from "lucide-react";
 import { ZenLogo } from "./logo";
+import { useCart } from "./cart-store";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -24,7 +27,18 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+  const [mounted, setMounted] = useState(false);
   const { scrollY } = useScroll();
+
+  // Cart state
+  const cartItems = useCart((s) => s.items);
+  const openCart = useCart((s) => s.openCart);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const cartCount = cartItems.reduce((sum, i) => sum + i.quantity, 0);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setScrolled(latest > 40);
@@ -123,6 +137,35 @@ export function Navbar() {
           </nav>
 
           <div className="flex items-center gap-2 md:gap-3">
+            {/* Cart button — next to Order, visible on all screen sizes */}
+            <button
+              type="button"
+              onClick={openCart}
+              aria-label={`View cart${mounted && cartCount > 0 ? `, ${cartCount} item${cartCount === 1 ? "" : "s"}` : ""}`}
+              className={cn(
+                "relative inline-flex items-center justify-center rounded-full transition-all duration-300 group",
+                // Slightly smaller on mobile, full size on desktop
+                "w-10 h-10 md:w-11 md:h-11",
+                cartCount > 0
+                  ? "bg-vermilion text-ivory hover:bg-vermilion-deep shadow-[0_4px_20px_-6px_rgba(200,16,46,0.5)]"
+                  : "border border-ivory/15 text-ivory hover:bg-white/5 hover:border-ivory/30"
+              )}
+            >
+              <ShoppingBag className="h-4 w-4 md:h-[18px] md:w-[18px] group-hover:scale-110 transition-transform" />
+              {/* Item count badge — hydration-safe */}
+              {mounted && cartCount > 0 && (
+                <motion.span
+                  key={cartCount}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                  className="absolute -top-1 -right-1 bg-gold text-ink rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] font-bold font-sans"
+                >
+                  {cartCount > 9 ? "9+" : cartCount}
+                </motion.span>
+              )}
+            </button>
+
             <button
               type="button"
               onClick={() => {
