@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster as SonnerToaster } from "sonner";
 import { Toaster } from "@/components/ui/toaster";
+import { Preloader } from "@/components/zen/preloader";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-display",
@@ -81,6 +82,7 @@ export default function RootLayout({
       <body
         className={`${cormorant.variable} ${inter.variable} antialiased bg-ink text-ivory font-sans`}
       >
+        <Preloader />
         {children}
         <Toaster />
         <SonnerToaster

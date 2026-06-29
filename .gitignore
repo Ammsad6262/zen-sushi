@@ -52,3 +52,21 @@ prompt
 server.log
 # Skills directory
 /skills/
+
+# ZEN-specific: don't commit local screenshots/uploads
+/download/
+/upload/
+/worklog.md
+
+# Local database
+/db/
+/prisma/*.db
+/prisma/*.db-journal
+
+# Z-ai internal scripts
+/.zscripts/
+
+# Local order data (customer orders saved to localStorage on the client,
+# but if we ever cache them server-side, don't commit them)
+/orders.json
+/zen-orders.json
