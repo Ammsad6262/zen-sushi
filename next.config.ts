@@ -9,8 +9,10 @@ const nextConfig: NextConfig = {
       {
         source: "/(.*)",
         headers: [
-          // Prevent clickjacking
-          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          // NOTE: X-Frame-Options is intentionally OMITTED in favor of the
+          // modern CSP `frame-ancestors` directive below. X-Frame-Options
+          // only allows a single origin and would block the sandbox preview
+          // gateway (preview-chat-*.space-z.ai) from embedding this site.
           // Browser-level XSS filter
           { key: "X-XSS-Protection", value: "1; mode=block" },
           // Force MIME types
@@ -20,7 +22,8 @@ const nextConfig: NextConfig = {
           // Permissions policy — lock down powerful APIs
           {
             key: "Permissions-Policy",
-            value: "camera=(), microphone=(), geolocation=(self), browsing-topics=()",
+            value:
+              "camera=(), microphone=(), geolocation=(self), browsing-topics=()",
           },
           // Strict CSP for a static marketing site.
           // - default-src 'self' for everything
@@ -29,6 +32,7 @@ const nextConfig: NextConfig = {
           // - allow fonts from gstatic
           // - allow frames from Google Maps
           // - allow ws/wss for HMR (dev only, harmless in prod)
+          // - frame-ancestors allows the sandbox preview gateway + self
           {
             key: "Content-Security-Policy",
             value: [
@@ -43,6 +47,9 @@ const nextConfig: NextConfig = {
               "object-src 'none'",
               "base-uri 'self'",
               "form-action 'self'",
+              // Allow the site to be embedded by the sandbox preview gateway
+              // and itself. This replaces the deprecated X-Frame-Options.
+              "frame-ancestors 'self' https://*.space-z.ai",
             ].join("; "),
           },
         ],
