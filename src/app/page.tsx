@@ -14,6 +14,8 @@ import { ScrollProgress } from "@/components/zen/scroll-progress";
 import { MobileActionBar } from "@/components/zen/mobile-action-bar";
 import { BackToTop } from "@/components/zen/back-to-top";
 import { OrderModal } from "@/components/zen/order-modal";
+import { CartButton } from "@/components/zen/cart-button";
+import { CartDrawer } from "@/components/zen/cart-drawer";
 
 export default function Home() {
   const [orderOpen, setOrderOpen] = useState(false);
@@ -47,9 +49,13 @@ export default function Home() {
       {/* Floating helpers */}
       <BackToTop />
       <MobileActionBar />
+      <CartButton />
 
       {/* Order modal — triggered via window event from any CTA */}
       <OrderModal open={orderOpen} onClose={() => setOrderOpen(false)} />
+
+      {/* Cart drawer — add items / checkout / place order */}
+      <CartDrawer />
     </div>
   );
 }

@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Flame, Leaf, Star, Wheat, type LucideIcon } from "lucide-react";
+import { Flame, Leaf, Star, Wheat, Plus, Check, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useCart, parsePrice } from "./cart-store";
+import { toast } from "sonner";
 
 type Dish = {
   name: string;
@@ -369,6 +371,7 @@ export function Menu() {
                         })}
                       </div>
                     )}
+                    <AddToOrderButton dish={dish} category={category.label} />
                   </motion.div>
                 ))}
               </div>
@@ -397,5 +400,73 @@ export function Menu() {
         </motion.div>
       </div>
     </section>
+  );
+}
+
+/* ---------------- Add to Order Button ---------------- */
+
+interface AddToOrderButtonProps {
+  dish: Dish;
+  category: string;
+}
+
+function AddToOrderButton({ dish, category }: AddToOrderButtonProps) {
+  const addItem = useCart((s) => s.addItem);
+  const openCart = useCart((s) => s.openCart);
+  const items = useCart((s) => s.items);
+  const [justAdded, setJustAdded] = useState(false);
+
+  const inCart = items.find((i) => i.id === dish.name);
+
+  const handleAdd = () => {
+    addItem({
+      id: dish.name,
+      name: dish.name,
+      price: parsePrice(dish.price),
+      priceDisplay: dish.price,
+      category,
+    });
+    setJustAdded(true);
+    toast.success(`${dish.name} added to order`, {
+      description: dish.price,
+      duration: 2200,
+      action: {
+        label: "View cart",
+        onClick: openCart,
+      },
+    });
+    setTimeout(() => setJustAdded(false), 1400);
+  };
+
+  return (
+    <div className="mt-3 flex items-center gap-3">
+      <button
+        onClick={handleAdd}
+        aria-label={`Add ${dish.name} to order`}
+        className={cn(
+          "inline-flex items-center gap-2 px-4 py-2 rounded-full text-[11px] uppercase tracking-[0.18em] font-medium transition-all duration-300 min-h-[40px]",
+          justAdded
+            ? "bg-emerald-500/20 border border-emerald-500/40 text-emerald-300"
+            : "bg-vermilion/10 border border-vermilion/30 text-vermilion hover:bg-vermilion hover:text-ivory hover:border-vermilion"
+        )}
+      >
+        {justAdded ? (
+          <>
+            <Check className="h-3.5 w-3.5" />
+            Added
+          </>
+        ) : (
+          <>
+            <Plus className="h-3.5 w-3.5" />
+            Add to Order
+          </>
+        )}
+      </button>
+      {inCart && (
+        <span className="text-xs text-ivory-soft/55">
+          {inCart.quantity} in cart
+        </span>
+      )}
+    </div>
   );
 }
