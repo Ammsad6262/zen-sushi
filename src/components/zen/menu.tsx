@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Flame, Leaf, Star, Wheat } from "lucide-react";
+import { Flame, Leaf, Star, Wheat, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type Dish = {
@@ -11,7 +11,6 @@ type Dish = {
   price: string;
   tags?: ("spicy" | "veg" | "popular" | "gf")[];
 };
-
 type Category = {
   id: string;
   label: string;
@@ -212,7 +211,7 @@ const CATEGORIES: Category[] = [
   },
 ];
 
-const TAG_META: Record<string, { label: string; icon: any; color: string }> = {
+const TAG_META: Record<string, { label: string; icon: LucideIcon; color: string }> = {
   spicy: { label: "Spicy", icon: Flame, color: "text-vermilion" },
   veg: { label: "Veg", icon: Leaf, color: "text-emerald-400" },
   popular: { label: "Popular", icon: Star, color: "text-gold" },
@@ -226,11 +225,11 @@ export function Menu() {
   return (
     <section
       id="menu"
-      className="relative py-24 md:py-36 border-t border-white/5 bg-ink-soft/40"
+      className="relative py-16 md:py-36 border-t border-white/5 bg-ink-soft/40"
     >
       <div className="mx-auto max-w-7xl px-5 md:px-8">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-14">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 md:gap-8 mb-10 md:mb-14">
           <div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -249,7 +248,7 @@ export function Menu() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-              className="font-display text-4xl md:text-6xl font-medium text-ivory leading-[1.05]"
+              className="font-display text-3xl md:text-6xl font-medium text-ivory leading-[1.1] md:leading-[1.05]"
             >
               Four cuisines,
               <br />
@@ -261,29 +260,33 @@ export function Menu() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ delay: 0.2, duration: 0.7 }}
-            className="text-ivory-soft/70 max-w-md leading-relaxed"
+            className="text-sm md:text-base text-ivory-soft/70 max-w-md leading-relaxed"
           >
             Prices range $11–$26 per plate. Average per person $20–$30. Full
             menu available for dine-in, takeout, and no-contact delivery.
           </motion.p>
         </div>
 
-        {/* Tabs */}
-        <div className="flex flex-wrap gap-2 mb-10 border-b border-white/5 pb-4">
+        {/* Tabs — horizontally scrollable on mobile, wrap on desktop */}
+        <div
+          className="flex md:flex-wrap gap-2 mb-8 md:mb-10 border-b border-white/5 pb-4 overflow-x-auto -mx-5 px-5 md:mx-0 md:px-0 scrollbar-none"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
           {CATEGORIES.map((cat) => {
             const isActive = cat.id === active;
             return (
               <button
                 key={cat.id}
                 onClick={() => setActive(cat.id)}
+                aria-pressed={isActive}
                 className={cn(
-                  "relative group flex items-center gap-3 px-5 py-3 rounded-full text-sm uppercase tracking-[0.2em] transition-all duration-300",
+                  "relative group flex items-center gap-2 md:gap-3 px-4 md:px-5 py-2.5 md:py-3 rounded-full text-xs md:text-sm uppercase tracking-[0.18em] md:tracking-[0.2em] transition-all duration-300 shrink-0 min-h-[44px]",
                   isActive
                     ? "bg-vermilion text-ivory"
                     : "bg-transparent text-ivory-soft/70 hover:text-ivory hover:bg-white/5"
                 )}
               >
-                <span className="font-display text-base opacity-80">
+                <span className="font-display text-sm md:text-base opacity-80">
                   {cat.kanji}
                 </span>
                 <span>{cat.label}</span>
@@ -300,24 +303,24 @@ export function Menu() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="grid lg:grid-cols-12 gap-12"
+            className="grid lg:grid-cols-12 gap-6 md:gap-12"
           >
-            {/* Left: category image + blurb */}
+            {/* Left: category image + blurb — stacks on top on mobile */}
             <div className="lg:col-span-4 lg:sticky lg:top-28 self-start">
-              <div className="relative aspect-square overflow-hidden rounded-2xl">
+              <div className="relative aspect-[16/10] lg:aspect-square overflow-hidden rounded-2xl">
                 <div
                   className="absolute inset-0 bg-cover bg-center transition-transform duration-700"
                   style={{ backgroundImage: `url(${category.image})` }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <div className="font-display text-7xl text-ivory/95 leading-none mb-2">
+                <div className="absolute bottom-0 left-0 right-0 p-5 md:p-6">
+                  <div className="font-display text-5xl md:text-7xl text-ivory/95 leading-none mb-2">
                     {category.kanji}
                   </div>
-                  <h3 className="font-display text-2xl text-ivory mb-1.5">
+                  <h3 className="font-display text-xl md:text-2xl text-ivory mb-1.5">
                     {category.label}
                   </h3>
-                  <p className="text-sm text-ivory-soft/75 leading-relaxed">
+                  <p className="text-xs md:text-sm text-ivory-soft/75 leading-relaxed">
                     {category.blurb}
                   </p>
                 </div>
@@ -326,25 +329,25 @@ export function Menu() {
 
             {/* Right: dish list */}
             <div className="lg:col-span-8">
-              <div className="grid sm:grid-cols-2 gap-x-10 gap-y-8">
+              <div className="grid sm:grid-cols-2 gap-x-6 md:gap-x-10 gap-y-6 md:gap-y-8">
                 {category.dishes.map((dish, i) => (
                   <motion.div
                     key={dish.name}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.06, duration: 0.5 }}
+                    transition={{ delay: Math.min(i * 0.06, 0.4), duration: 0.5 }}
                     className="group"
                   >
-                    <div className="flex items-baseline gap-3 mb-1.5">
-                      <h4 className="font-display text-xl text-ivory group-hover:text-gold transition-colors duration-300">
+                    <div className="flex items-baseline gap-2 md:gap-3 mb-1.5">
+                      <h4 className="font-display text-lg md:text-xl text-ivory group-hover:text-gold transition-colors duration-300">
                         {dish.name}
                       </h4>
                       <span className="flex-1 border-b border-dashed border-ivory-soft/20 translate-y-[-3px]" />
-                      <span className="font-display text-lg text-vermilion font-medium">
+                      <span className="font-display text-base md:text-lg text-vermilion font-medium shrink-0">
                         {dish.price}
                       </span>
                     </div>
-                    <p className="text-sm text-ivory-soft/65 leading-relaxed">
+                    <p className="text-xs md:text-sm text-ivory-soft/65 leading-relaxed">
                       {dish.description}
                     </p>
                     {dish.tags && dish.tags.length > 0 && (
@@ -379,7 +382,7 @@ export function Menu() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3, duration: 0.7 }}
-          className="mt-16 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-sm text-ivory-soft/55"
+          className="mt-10 md:mt-16 pt-6 md:pt-8 border-t border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-sm text-ivory-soft/55"
         >
           <p>
             Have a dietary request? Call us — we&apos;ll happily adapt most

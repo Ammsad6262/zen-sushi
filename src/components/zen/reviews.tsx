@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -51,26 +51,44 @@ export function Reviews() {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(0);
 
-  const paginate = (dir: number) => {
+  const paginate = useCallback((dir: number) => {
     setDirection(dir);
     setIndex((prev) => (prev + dir + REVIEWS.length) % REVIEWS.length);
-  };
+  }, []);
+
+  const goTo = useCallback(
+    (i: number) => {
+      setDirection(i > index ? 1 : -1);
+      setIndex(i);
+    },
+    [index]
+  );
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") paginate(-1);
+      else if (e.key === "ArrowRight") paginate(1);
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [paginate]);
 
   const review = REVIEWS[index];
 
   return (
     <section
       id="reviews"
-      className="relative py-24 md:py-36 border-t border-white/5 bg-ink-soft/40 overflow-hidden"
+      className="relative py-16 md:py-36 border-t border-white/5 bg-ink-soft/40 overflow-hidden"
     >
       {/* Decorative giant quote */}
       <div className="absolute -top-10 left-1/2 -translate-x-1/2 pointer-events-none opacity-[0.04]">
-        <Quote className="h-[28rem] w-[28rem] text-ivory" fill="currentColor" />
+        <Quote className="h-16 w-16 md:h-[28rem] md:w-[28rem] text-ivory" fill="currentColor" />
       </div>
 
       <div className="relative mx-auto max-w-5xl px-5 md:px-8">
         {/* Header */}
-        <div className="text-center mb-14">
+        <div className="text-center mb-10 md:mb-14">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -89,7 +107,7 @@ export function Reviews() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            className="font-display text-4xl md:text-6xl font-medium text-ivory leading-[1.05]"
+            className="font-display text-3xl md:text-6xl font-medium text-ivory leading-[1.1] md:leading-[1.05]"
           >
             What Bethel is <span className="italic text-gold/90">saying.</span>
           </motion.h2>
@@ -102,9 +120,9 @@ export function Reviews() {
           >
             <div className="flex">
               {[0, 1, 2, 3].map((i) => (
-                <Star key={i} className="h-5 w-5 fill-gold text-gold" />
+                <Star key={i} className="h-4 w-4 md:h-5 md:w-5 fill-gold text-gold" />
               ))}
-              <Star className="h-5 w-5 text-ivory-soft/30" />
+              <Star className="h-4 w-4 md:h-5 md:w-5 text-ivory-soft/30" />
             </div>
             <span className="text-ivory-soft/70 text-sm">
               <span className="text-ivory font-medium">3.8</span> · 44 Google reviews
@@ -113,7 +131,7 @@ export function Reviews() {
         </div>
 
         {/* Review card */}
-        <div className="relative min-h-[340px] md:min-h-[280px]">
+        <div className="relative min-h-[300px] md:min-h-[280px]">
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={index}
@@ -124,11 +142,11 @@ export function Reviews() {
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               className="text-center"
             >
-              <Quote className="h-10 w-10 text-vermilion mx-auto mb-6" fill="currentColor" />
-              <blockquote className="font-display text-2xl md:text-3xl text-ivory leading-relaxed italic max-w-3xl mx-auto">
+              <Quote className="h-8 w-8 md:h-10 md:w-10 text-vermilion mx-auto mb-4 md:mb-6" fill="currentColor" />
+              <blockquote className="font-display text-lg md:text-3xl text-ivory leading-relaxed italic max-w-3xl mx-auto px-2">
                 &ldquo;{review.text}&rdquo;
               </blockquote>
-              <div className="mt-8 flex flex-col items-center gap-2">
+              <div className="mt-6 md:mt-8 flex flex-col items-center gap-2">
                 <div className="flex">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star
@@ -160,11 +178,11 @@ export function Reviews() {
         </div>
 
         {/* Controls */}
-        <div className="mt-10 flex items-center justify-center gap-4">
+        <div className="mt-8 md:mt-10 flex items-center justify-center gap-3 md:gap-4">
           <button
             onClick={() => paginate(-1)}
             aria-label="Previous review"
-            className="w-11 h-11 rounded-full border border-ivory/20 flex items-center justify-center text-ivory hover:bg-vermilion hover:border-vermilion transition-all duration-300 group"
+            className="w-11 h-11 md:w-12 md:h-12 rounded-full border border-ivory/20 flex items-center justify-center text-ivory hover:bg-vermilion hover:border-vermilion transition-all duration-300 group shrink-0"
           >
             <ChevronLeft className="h-5 w-5 group-hover:-translate-x-0.5 transition-transform" />
           </button>
@@ -173,11 +191,9 @@ export function Reviews() {
             {REVIEWS.map((_, i) => (
               <button
                 key={i}
-                onClick={() => {
-                  setDirection(i > index ? 1 : -1);
-                  setIndex(i);
-                }}
+                onClick={() => goTo(i)}
                 aria-label={`Go to review ${i + 1}`}
+                aria-current={i === index}
                 className={`h-1.5 rounded-full transition-all duration-300 ${
                   i === index
                     ? "w-8 bg-vermilion"
@@ -190,7 +206,7 @@ export function Reviews() {
           <button
             onClick={() => paginate(1)}
             aria-label="Next review"
-            className="w-11 h-11 rounded-full border border-ivory/20 flex items-center justify-center text-ivory hover:bg-vermilion hover:border-vermilion transition-all duration-300 group"
+            className="w-11 h-11 md:w-12 md:h-12 rounded-full border border-ivory/20 flex items-center justify-center text-ivory hover:bg-vermilion hover:border-vermilion transition-all duration-300 group shrink-0"
           >
             <ChevronRight className="h-5 w-5 group-hover:translate-x-0.5 transition-transform" />
           </button>

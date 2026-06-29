@@ -28,16 +28,16 @@ export function Footer() {
   };
 
   return (
-    <footer className="relative border-t border-white/5 bg-ink pt-20 pb-10 overflow-hidden">
+    <footer className="relative border-t border-white/5 bg-ink pt-12 md:pt-20 pb-24 md:pb-10 overflow-hidden">
       {/* Decorative giant kanji */}
       <div className="absolute -bottom-32 -left-20 opacity-[0.025] pointer-events-none">
-        <span className="font-display text-[30rem] leading-none text-ivory select-none">
+        <span className="font-display text-[16rem] md:text-[30rem] leading-none text-ivory select-none">
           寿
         </span>
       </div>
 
       <div className="relative mx-auto max-w-7xl px-5 md:px-8">
-        <div className="grid md:grid-cols-12 gap-10 mb-16">
+        <div className="grid md:grid-cols-12 gap-8 md:gap-10 mb-10 md:mb-16">
           {/* Brand */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -46,18 +46,18 @@ export function Footer() {
             transition={{ duration: 0.7 }}
             className="md:col-span-5"
           >
-            <ZenLogo size={56} showText />
-            <p className="mt-6 text-ivory-soft/65 leading-relaxed max-w-sm">
+            <ZenLogo size={48} showText />
+            <p className="mt-5 md:mt-6 text-sm md:text-base text-ivory-soft/65 leading-relaxed max-w-sm">
               A family-run kitchen serving Japanese, Korean, Chinese &amp;
               American cuisine in Bethel, Alaska. One table, many traditions.
             </p>
-            <div className="mt-6 flex items-center gap-3">
+            <div className="mt-5 md:mt-6 flex items-center gap-3">
               <a
                 href="https://www.instagram.com/zenbethel/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
-                className="w-10 h-10 rounded-full border border-ivory/15 flex items-center justify-center text-ivory hover:bg-vermilion hover:border-vermilion transition-all duration-300"
+                className="w-11 h-11 rounded-full border border-ivory/15 flex items-center justify-center text-ivory hover:bg-vermilion hover:border-vermilion transition-all duration-300"
               >
                 <Instagram className="h-4 w-4" />
               </a>
@@ -66,14 +66,14 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
-                className="w-10 h-10 rounded-full border border-ivory/15 flex items-center justify-center text-ivory hover:bg-vermilion hover:border-vermilion transition-all duration-300"
+                className="w-11 h-11 rounded-full border border-ivory/15 flex items-center justify-center text-ivory hover:bg-vermilion hover:border-vermilion transition-all duration-300"
               >
                 <Facebook className="h-4 w-4" />
               </a>
               <a
                 href="tel:+19075432222"
                 aria-label="Call ZEN Sushi"
-                className="w-10 h-10 rounded-full border border-ivory/15 flex items-center justify-center text-ivory hover:bg-vermilion hover:border-vermilion transition-all duration-300"
+                className="w-11 h-11 rounded-full border border-ivory/15 flex items-center justify-center text-ivory hover:bg-vermilion hover:border-vermilion transition-all duration-300"
               >
                 <Phone className="h-4 w-4" />
               </a>
@@ -88,16 +88,16 @@ export function Footer() {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="md:col-span-3"
           >
-            <h4 className="text-xs uppercase tracking-[0.32em] text-ivory-soft/45 mb-5">
+            <h4 className="text-xs uppercase tracking-[0.32em] text-ivory-soft/45 mb-4 md:mb-5">
               Explore
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-2.5 md:space-y-3">
               {NAV.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    className="text-ivory-soft/75 hover:text-vermilion transition-colors text-sm tracking-wide inline-flex items-center gap-2 group"
+                    className="text-ivory-soft/75 hover:text-vermilion transition-colors text-sm tracking-wide inline-flex items-center gap-2 group min-h-[44px] py-1"
                   >
                     <span className="h-px w-3 bg-vermilion opacity-0 group-hover:opacity-100 transition-opacity" />
                     {link.label}
@@ -115,17 +115,17 @@ export function Footer() {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="md:col-span-4"
           >
-            <h4 className="text-xs uppercase tracking-[0.32em] text-ivory-soft/45 mb-5">
+            <h4 className="text-xs uppercase tracking-[0.32em] text-ivory-soft/45 mb-4 md:mb-5">
               Visit
             </h4>
-            <ul className="space-y-4 text-sm">
+            <ul className="space-y-3 md:space-y-4 text-sm">
               <li className="flex items-start gap-3">
                 <MapPin className="h-4 w-4 text-vermilion mt-0.5 shrink-0" />
                 <span className="text-ivory-soft/75">
                   320 Tundra Way, Bethel, AK 99559, United States
                 </span>
               </li>
-              <li className="flex items-center gap-3">
+              <li className="flex items-center gap-3 min-h-[44px]">
                 <Phone className="h-4 w-4 text-vermilion shrink-0" />
                 <a
                   href="tel:+19075432222"

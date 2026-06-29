@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
+import { Toaster as SonnerToaster } from "sonner";
 import { Toaster } from "@/components/ui/toaster";
 
 const cormorant = Cormorant_Garamond({
@@ -31,8 +32,10 @@ export const metadata: Metadata = {
     "ZEN Bethel",
   ],
   authors: [{ name: "ZEN Sushi" }],
+  manifest: "/manifest.json",
   icons: {
     icon: "/zen/favicon.svg",
+    apple: "/zen/favicon.svg",
   },
   openGraph: {
     title: "ZEN Sushi · Bethel, AK",
@@ -51,6 +54,13 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#0a0a0e",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -63,6 +73,16 @@ export default function RootLayout({
       >
         {children}
         <Toaster />
+        <SonnerToaster
+          position="top-center"
+          toastOptions={{
+            style: {
+              background: "oklch(0.18 0.012 270)",
+              color: "oklch(0.96 0.008 90)",
+              border: "1px solid rgba(255,255,255,0.1)",
+            },
+          }}
+        />
       </body>
     </html>
   );

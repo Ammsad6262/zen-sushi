@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Star, MapPin, ChevronDown, UtensilsCrossed } from "lucide-react";
+import { toast } from "sonner";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -37,7 +38,7 @@ export function Hero() {
     <section
       id="top"
       ref={ref}
-      className="relative h-[100svh] min-h-[680px] w-full overflow-hidden"
+      className="relative h-[100svh] min-h-[600px] md:min-h-[680px] w-full overflow-hidden"
     >
       {/* Background image with parallax + ken burns */}
       <motion.div
@@ -55,8 +56,8 @@ export function Hero() {
         <div className="absolute inset-0 grain-overlay" />
       </motion.div>
 
-      {/* Vertical Japanese accent (left) */}
-      <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden lg:block z-10">
+      {/* Vertical Japanese accent (left) - desktop only */}
+      <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden xl:block z-10">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -67,12 +68,12 @@ export function Hero() {
         </motion.div>
       </div>
 
-      {/* Right rating card */}
+      {/* Right rating card - desktop only */}
       <motion.div
         initial={{ opacity: 0, x: 30 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 1.6, duration: 0.8 }}
-        className="absolute right-6 top-28 hidden md:block z-10"
+        className="absolute right-6 top-28 hidden lg:block z-10"
       >
         <div className="rounded-2xl border border-white/10 bg-ink/40 backdrop-blur-md p-5 w-56">
           <div className="flex items-center gap-2 mb-2">
@@ -98,7 +99,7 @@ export function Hero() {
       {/* Center content */}
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}
-        className="relative z-10 h-full flex flex-col justify-center items-start max-w-7xl mx-auto px-5 md:px-8"
+        className="relative z-10 h-full flex flex-col justify-center items-start max-w-7xl mx-auto px-5 md:px-8 pb-20 md:pb-0"
       >
         <motion.div
           variants={containerVariants}
@@ -109,10 +110,10 @@ export function Hero() {
           {/* Top eyebrow */}
           <motion.div
             variants={itemVariants}
-            className="flex items-center gap-3 mb-6"
+            className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6"
           >
-            <span className="h-px w-12 bg-vermilion" />
-            <span className="text-ivory-soft/80 text-xs md:text-sm uppercase tracking-[0.32em] font-sans">
+            <span className="h-px w-8 md:w-12 bg-vermilion" />
+            <span className="text-ivory-soft/80 text-[10px] md:text-sm uppercase tracking-[0.2em] md:tracking-[0.32em] font-sans">
               Japanese · Korean · Chinese · American
             </span>
           </motion.div>
@@ -120,7 +121,7 @@ export function Hero() {
           {/* Headline */}
           <motion.h1
             variants={itemVariants}
-            className="font-display text-[15vw] leading-[0.88] md:text-[10rem] font-medium text-ivory"
+            className="font-display text-[22vw] sm:text-[18vw] md:text-[10rem] leading-[0.88] font-medium text-ivory"
           >
             <span className="block">ZEN</span>
             <span className="block italic text-gold/90 font-light">
@@ -131,7 +132,7 @@ export function Hero() {
           {/* Sub headline */}
           <motion.p
             variants={itemVariants}
-            className="mt-6 text-lg md:text-xl text-ivory-soft/85 font-light max-w-xl leading-relaxed"
+            className="mt-5 md:mt-6 text-base md:text-xl text-ivory-soft/85 font-light max-w-xl leading-relaxed"
           >
             A family-run kitchen in Bethel, Alaska — where the calm of Japanese
             craft meets the warmth of Korean, Chinese &amp; American favorites.
@@ -141,7 +142,7 @@ export function Hero() {
           {/* CTAs */}
           <motion.div
             variants={itemVariants}
-            className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-4"
+            className="mt-8 md:mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 md:gap-4 w-full sm:w-auto"
           >
             <a
               href="#menu"
@@ -153,32 +154,28 @@ export function Hero() {
                   window.scrollTo({ top, behavior: "smooth" });
                 }
               }}
-              className="group inline-flex items-center gap-3 px-7 py-4 bg-vermilion text-ivory rounded-full text-sm uppercase tracking-[0.22em] font-medium hover:bg-vermilion-deep transition-all duration-300 shadow-[0_8px_30px_-8px_rgba(200,16,46,0.6)] hover:shadow-[0_12px_40px_-8px_rgba(200,16,46,0.8)] hover:-translate-y-0.5"
+              className="group inline-flex items-center justify-center gap-3 px-6 md:px-7 py-3.5 md:py-4 bg-vermilion text-ivory rounded-full text-xs md:text-sm uppercase tracking-[0.18em] md:tracking-[0.22em] font-medium hover:bg-vermilion-deep transition-all duration-300 shadow-[0_8px_30px_-8px_rgba(200,16,46,0.6)] hover:shadow-[0_12px_40px_-8px_rgba(200,16,46,0.8)] hover:-translate-y-0.5 min-h-[48px]"
             >
               <UtensilsCrossed className="h-4 w-4 group-hover:rotate-12 transition-transform" />
               Explore the Menu
             </a>
-            <a
-              href="#visit"
-              onClick={(e) => {
-                e.preventDefault();
-                const el = document.querySelector("#visit");
-                if (el) {
-                  const top = el.getBoundingClientRect().top + window.scrollY - 70;
-                  window.scrollTo({ top, behavior: "smooth" });
-                }
+            <button
+              type="button"
+              onClick={() => {
+                window.dispatchEvent(new CustomEvent("zen:open-order"));
+                toast.info("Opening order options…", { duration: 2000 });
               }}
-              className="group inline-flex items-center gap-3 px-7 py-4 border border-ivory/20 text-ivory rounded-full text-sm uppercase tracking-[0.22em] font-medium hover:bg-ivory/5 hover:border-ivory/40 transition-all duration-300"
+              className="group inline-flex items-center justify-center gap-3 px-6 md:px-7 py-3.5 md:py-4 border border-ivory/20 text-ivory rounded-full text-xs md:text-sm uppercase tracking-[0.18em] md:tracking-[0.22em] font-medium hover:bg-ivory/5 hover:border-ivory/40 transition-all duration-300 min-h-[48px]"
             >
               <MapPin className="h-4 w-4 text-vermilion group-hover:scale-110 transition-transform" />
-              Find Us in Bethel
-            </a>
+              Order Now
+            </button>
           </motion.div>
 
           {/* Meta row */}
           <motion.div
             variants={itemVariants}
-            className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 text-xs uppercase tracking-[0.22em] text-ivory-soft/60"
+            className="mt-8 md:mt-12 flex flex-wrap items-center gap-x-4 md:gap-x-8 gap-y-2.5 text-[10px] md:text-xs uppercase tracking-[0.18em] md:tracking-[0.22em] text-ivory-soft/60"
           >
             <span className="flex items-center gap-2">
               <span className="relative flex h-2 w-2">
@@ -187,20 +184,20 @@ export function Hero() {
               </span>
               Closed · Opens 11 AM
             </span>
-            <span className="h-3 w-px bg-ivory-soft/20" />
+            <span className="hidden sm:inline-block h-3 w-px bg-ivory-soft/20" />
             <span>$20–30 per person</span>
-            <span className="h-3 w-px bg-ivory-soft/20" />
+            <span className="hidden sm:inline-block h-3 w-px bg-ivory-soft/20" />
             <span>Dine-in · Takeout · Delivery</span>
           </motion.div>
         </motion.div>
       </motion.div>
 
-      {/* Scroll cue */}
+      {/* Scroll cue - desktop only (mobile has bottom marquee) */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2.2, duration: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-ivory-soft/60"
+        className="absolute bottom-16 left-1/2 -translate-x-1/2 z-10 hidden md:flex flex-col items-center gap-2 text-ivory-soft/60"
       >
         <span className="text-[10px] uppercase tracking-[0.4em]">Scroll</span>
         <motion.div
@@ -212,7 +209,7 @@ export function Hero() {
       </motion.div>
 
       {/* Bottom marquee strip */}
-      <div className="absolute bottom-0 inset-x-0 z-10 overflow-hidden border-t border-white/5 bg-ink/60 backdrop-blur-sm py-3">
+      <div className="absolute bottom-0 inset-x-0 z-20 overflow-hidden border-t border-white/5 bg-ink/60 backdrop-blur-sm py-2.5 md:py-3">
         <div className="flex whitespace-nowrap animate-marquee">
           {Array.from({ length: 2 }).map((_, dup) => (
             <div key={dup} className="flex items-center shrink-0">
@@ -228,9 +225,9 @@ export function Hero() {
               ].map((item) => (
                 <span
                   key={item + dup}
-                  className="flex items-center text-xs uppercase tracking-[0.32em] text-ivory-soft/50 font-sans px-8"
+                  className="flex items-center text-[10px] md:text-xs uppercase tracking-[0.22em] md:tracking-[0.32em] text-ivory-soft/50 font-sans px-5 md:px-8"
                 >
-                  <span className="text-vermilion mr-3">◆</span>
+                  <span className="text-vermilion mr-2 md:mr-3">◆</span>
                   {item}
                 </span>
               ))}
