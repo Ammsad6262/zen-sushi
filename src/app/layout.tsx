@@ -68,6 +68,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Belt-and-suspenders CSP for frame embedding.
+            The HTTP header version (in next.config.ts) is authoritative,
+            but this meta tag helps when the browser has cached an old
+            restrictive CSP and refuses to re-fetch the headers. */}
+        <meta
+          httpEquiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; frame-src 'self' https://www.google.com https://maps.google.com; connect-src 'self' https:; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self' https://*.space-z.ai http://*.space-z.ai https://space-z.ai http://space-z.ai"
+        />
+      </head>
       <body
         className={`${cormorant.variable} ${inter.variable} antialiased bg-ink text-ivory font-sans`}
       >

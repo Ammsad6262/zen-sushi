@@ -49,7 +49,9 @@ const nextConfig: NextConfig = {
               "form-action 'self'",
               // Allow the site to be embedded by the sandbox preview gateway
               // and itself. This replaces the deprecated X-Frame-Options.
-              "frame-ancestors 'self' https://*.space-z.ai",
+              // The preview domain pattern is preview-chat-{uuid}.space-z.ai,
+              // so we allow all subdomains of space-z.ai over both https and http.
+              "frame-ancestors 'self' https://*.space-z.ai http://*.space-z.ai https://space-z.ai http://space-z.ai",
             ].join("; "),
           },
         ],
