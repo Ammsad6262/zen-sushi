@@ -28,7 +28,7 @@ const CATEGORIES: Category[] = [
     label: "Sushi & Sashimi",
     kanji: "鮨",
     blurb: "Hand-pressed nigiri, signature rolls, and sashimi cut to order.",
-    image: "/zen/dish-sashimi.png",
+    image: "/zen/dish-sashimi.webp",
     dishes: [
       {
         name: "Zen Signature Roll",
@@ -84,7 +84,7 @@ const CATEGORIES: Category[] = [
     label: "Korean",
     kanji: "한",
     blurb: "Bulgogi, stews, and banchan-worthy plates from family recipes.",
-    image: "/zen/dish-bulgogi.png",
+    image: "/zen/dish-bulgogi.webp",
     dishes: [
       {
         name: "Bulgogi",
@@ -130,7 +130,7 @@ const CATEGORIES: Category[] = [
     label: "Chinese",
     kanji: "中",
     blurb: "Wok-fired classics — General Tso, Kung Pao, and homestyle plates.",
-    image: "/zen/dish-tso.png",
+    image: "/zen/dish-tso.webp",
     dishes: [
       {
         name: "General Tso's Chicken",
@@ -173,7 +173,7 @@ const CATEGORIES: Category[] = [
     label: "American",
     kanji: "米",
     blurb: "Bethel favorites — burgers, baskets, and the classics done right.",
-    image: "/zen/dish-burger.png",
+    image: "/zen/dish-burger.webp",
     dishes: [
       {
         name: "Bethel Burger",

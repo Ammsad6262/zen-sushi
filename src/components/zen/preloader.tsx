@@ -27,17 +27,36 @@ export function Preloader() {
   useEffect(() => {
     // Don't show the preloader again within the same browser session
     // (e.g. when navigating back, or after a soft refresh)
-    if (sessionStorage.getItem("zen-preloader-done")) {
+    try {
+      if (sessionStorage.getItem("zen-preloader-done")) {
+        setLoading(false);
+        return;
+      }
+    } catch {
+      // sessionStorage might be unavailable (in-app browsers, privacy mode)
+      // In that case, skip the preloader entirely — better to show the site
+      // immediately than force a 1.2s black screen every time
       setLoading(false);
       return;
     }
 
-    // Drive the progress bar with a smooth easing curve.
-    // We don't tie this to actual asset loading because Next.js
-    // hydrates almost instantly — the loader is a brand moment,
-    // not a technical necessity. We give it a fixed ~2.4s runtime.
+    // Detect prefers-reduced-motion — skip preloader for users who
+    // prefer less motion (accessibility + performance on low-end devices)
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReducedMotion) {
+      try {
+        sessionStorage.setItem("zen-preloader-done", "1");
+      } catch {}
+      setLoading(false);
+      return;
+    }
+
+    // Shorter duration: 1.2s is enough for the brand moment without
+    // feeling sluggish on slow in-app browser WebViews
     const start = performance.now();
-    const DURATION = 2400;
+    const DURATION = 1200;
 
     let raf = 0;
     const tick = (now: number) => {
@@ -52,18 +71,23 @@ export function Preloader() {
       } else {
         // Brief pause at 100% before sliding away
         setTimeout(() => {
-          sessionStorage.setItem("zen-preloader-done", "1");
+          try {
+            sessionStorage.setItem("zen-preloader-done", "1");
+          } catch {}
           setLoading(false);
-        }, 280);
+        }, 200);
       }
     };
     raf = requestAnimationFrame(tick);
 
-    // Safety: force-hide after 4s no matter what
+    // Safety: force-hide after 2.5s no matter what (was 4s — too long
+    // for in-app browser sessions where every second feels like lag)
     const safety = setTimeout(() => {
-      sessionStorage.setItem("zen-preloader-done", "1");
+      try {
+        sessionStorage.setItem("zen-preloader-done", "1");
+      } catch {}
       setLoading(false);
-    }, 4000);
+    }, 2500);
 
     return () => {
       cancelAnimationFrame(raf);

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Star, MapPin, ChevronDown, UtensilsCrossed } from "lucide-react";
 import { toast } from "sonner";
 
@@ -29,9 +29,25 @@ export function Hero() {
     offset: ["start start", "end start"],
   });
 
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const bgScale = useTransform(scrollYProgress, [0, 1], [1.05, 1.18]);
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "60%"]);
+  // Detect mobile for performance optimization
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // On mobile, disable parallax transforms (they cause jank in in-app
+  // browser WebViews). The transforms still exist but won't update on
+  // scroll — effectively static.
+  const bgY = useTransform(scrollYProgress, [0, 1], isMobile ? ["0%", "0%"] : ["0%", "30%"]);
+  const bgScale = useTransform(
+    scrollYProgress,
+    [0, 1],
+    isMobile ? [1.05, 1.05] : [1.05, 1.18]
+  );
+  const contentY = useTransform(scrollYProgress, [0, 1], isMobile ? ["0%", "0%"] : ["0%", "60%"]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   return (
@@ -47,7 +63,7 @@ export function Hero() {
       >
         <div
           className="absolute inset-0 animate-ken-burns bg-cover bg-center"
-          style={{ backgroundImage: "url('/zen/hero-sushi.png')" }}
+          style={{ backgroundImage: "url('/zen/hero-sushi.webp')" }}
         />
         {/* Dark cinematic overlays */}
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/65 to-ink/40" />

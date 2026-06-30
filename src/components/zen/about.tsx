@@ -36,7 +36,7 @@ export function About() {
           >
             <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
               <Image
-                src="/zen/interior.png"
+                src="/zen/interior.webp"
                 alt="The ZEN Sushi dining room in Bethel, Alaska"
                 fill
                 className="object-cover"
@@ -52,7 +52,7 @@ export function About() {
               className="hidden sm:block absolute -bottom-10 -right-6 md:-right-10 w-32 h-32 md:w-56 md:h-56 rounded-2xl overflow-hidden border-4 border-ink shadow-2xl"
             >
               <Image
-                src="/zen/dish-nigiri.png"
+                src="/zen/dish-nigiri.webp"
                 alt="Fresh nigiri at ZEN Sushi"
                 fill
                 className="object-cover"

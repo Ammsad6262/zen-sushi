@@ -7,43 +7,43 @@ import { Camera, X, ChevronLeft, ChevronRight } from "lucide-react";
 
 const IMAGES = [
   {
-    src: "/zen/hero-sushi.png",
+    src: "/zen/hero-sushi.webp",
     alt: "Premium sushi platter at ZEN Sushi",
     span: "sm:col-span-2 sm:row-span-2",
     aspect: "aspect-square",
   },
   {
-    src: "/zen/dish-roll.png",
+    src: "/zen/dish-roll.webp",
     alt: "Spicy tuna roll with avocado",
     span: "",
     aspect: "aspect-square",
   },
   {
-    src: "/zen/dish-bibimbap.png",
+    src: "/zen/dish-bibimbap.webp",
     alt: "Korean bibimbap in hot stone bowl",
     span: "",
     aspect: "aspect-square",
   },
   {
-    src: "/zen/chef-action.png",
+    src: "/zen/chef-action.webp",
     alt: "Sushi chef plating nigiri",
     span: "sm:col-span-2",
     aspect: "aspect-[2/1] sm:aspect-[2/1]",
   },
   {
-    src: "/zen/dish-sashimi.png",
+    src: "/zen/dish-sashimi.webp",
     alt: "Salmon sashimi on slate",
     span: "",
     aspect: "aspect-square",
   },
   {
-    src: "/zen/dish-bulgogi.png",
+    src: "/zen/dish-bulgogi.webp",
     alt: "Korean bulgogi sizzling",
     span: "",
     aspect: "aspect-square",
   },
   {
-    src: "/zen/dish-mochi.png",
+    src: "/zen/dish-mochi.webp",
     alt: "Mochi dessert trio",
     span: "",
     aspect: "aspect-square",

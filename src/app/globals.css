@@ -240,3 +240,45 @@ body {
   background-clip: text;
   color: transparent;
 }
+
+/* ============================================================
+   Performance: reduce animations on mobile + reduced-motion
+   ============================================================ */
+
+/* Respect users who prefer reduced motion (accessibility + battery) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-ken-burns,
+  .animate-marquee,
+  .animate-float-y,
+  .animate-slow-ping {
+    animation: none !important;
+  }
+}
+
+/* On small screens, disable the heaviest GPU animations
+   (Ken Burns scale, marquee, float) to reduce jank in
+   in-app browser WebViews which have limited GPU resources */
+@media (max-width: 768px) {
+  .animate-ken-burns {
+    animation: none !important;
+    transform: scale(1.05) !important;
+  }
+
+  .animate-float-y {
+    animation: none !important;
+  }
+
+  /* Keep marquee but slow it down so it's less GPU-intensive */
+  .animate-marquee {
+    animation-duration: 60s !important;
+  }
+}

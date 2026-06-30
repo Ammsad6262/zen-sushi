@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     url: "https://zenbethel.com",
     siteName: "ZEN Sushi",
     type: "website",
-    images: ["/zen/hero-sushi.png"],
+    images: ["/zen/hero-sushi.webp"],
   },
   twitter: {
     card: "summary_large_image",
